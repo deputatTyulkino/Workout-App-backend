@@ -3,7 +3,7 @@ from django.db import models
 
 class WorkoutManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().select_related('author')
+        return super().get_queryset().select_related('author').prefetch_related('exercises')
 
     def public_workouts(self):
         return self.get_queryset().filter(is_public=True)

@@ -3,6 +3,7 @@ import uuid
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from apps.exercise.models import Exercise
 from apps.workouts.managers import WorkoutManager
 
 User = get_user_model()
@@ -16,6 +17,7 @@ class Workout(models.Model):
     duration_minutes = models.IntegerField(
         default=60, verbose_name='Duration of workout (minutes)'
     )
+    exercises = models.ManyToManyField(Exercise, verbose_name='Exercises')
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -26,7 +28,7 @@ class Workout(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    objects = WorkoutManager
+    objects = WorkoutManager()
 
     class Meta:
         indexes = [models.Index(fields=('name', 'author'))]

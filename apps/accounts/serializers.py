@@ -1,7 +1,6 @@
 from typing import Any
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
-from django.core.validators import validate_email
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
@@ -40,6 +39,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = User
         exclude = ('password',)
 
+
 class LoginSerializer(TokenObtainPairSerializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True, min_length=6)
@@ -59,3 +59,9 @@ class ResponseAuthSerializer(serializers.Serializer):
     access = serializers.CharField()
     refresh = serializers.CharField()
     user = ProfileSerializer()
+
+
+class AuthorExerciseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email')
