@@ -31,6 +31,8 @@ class ExerciseAPIView(ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return ExerciseSerializer
+        elif self.action == 'create':
+            return CreateExerciseSerializer
         else:
             return DetailExerciseSerializer
 
@@ -55,7 +57,7 @@ class ExerciseAPIView(ModelViewSet):
         parameters=[OpenApiParameter(
             name='exercise_id',
             type=OpenApiTypes.UUID,
-            location='query',
+            location='path',
             description='ID упражнения для его получения'
         )]
     )
@@ -65,7 +67,8 @@ class ExerciseAPIView(ModelViewSet):
     @extend_schema(
         summary='Создание упражнения',
         tags=tags,
-        request=CreateExerciseSerializer
+        request=CreateExerciseSerializer,
+        responses=ExerciseSerializer
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
@@ -78,7 +81,7 @@ class ExerciseAPIView(ModelViewSet):
             OpenApiParameter(
                 name='exercise_id',
                 type=OpenApiTypes.UUID,
-                location='query',
+                location='path',
                 description='ID упражнения для его удаления'
             )
         ]
@@ -96,7 +99,7 @@ class ExerciseAPIView(ModelViewSet):
             OpenApiParameter(
                 name='exercise_id',
                 type=OpenApiTypes.UUID,
-                location='query',
+                location='path',
                 description='ID упражнения для его удаления'
             )
         ]
@@ -104,6 +107,6 @@ class ExerciseAPIView(ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         response = super().destroy(request, *args, **kwargs)
         return Response(
-            response.data,
+            data={'message': 'Delete is successfully'},
             status=status.HTTP_200_OK
         )

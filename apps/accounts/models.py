@@ -13,12 +13,12 @@ class User(AbstractBaseUser):
     image_before = models.ImageField(
         upload_to='profile_image',
         null=True,
-        verbose_name='Before User image'
+        verbose_name='Before User image',
     )
     image_after = models.ImageField(
         upload_to='profile_image',
         null=True,
-        verbose_name='After User image'
+        verbose_name='After User image',
     )
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
