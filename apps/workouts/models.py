@@ -14,7 +14,7 @@ class Workout(models.Model):
     id = models.UUIDField(primary_key=True, unique=True, editable=False, default=uuid.uuid4)
     name = models.CharField(max_length=50, verbose_name='Name of workout')
     description = models.TextField(verbose_name='Description of workout')
-    duration_minutes = models.IntegerField(
+    duration = models.IntegerField(
         default=60, verbose_name='Duration of workout (minutes)'
     )
     exercises = models.ManyToManyField(Exercise, verbose_name='Exercises')
@@ -24,6 +24,7 @@ class Workout(models.Model):
         related_name='workouts',
         verbose_name='Author of workout'
     )
+    is_completed = models.BooleanField(default=False)
     is_public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

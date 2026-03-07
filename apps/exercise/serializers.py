@@ -13,6 +13,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ExerciseSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField()
+
     class Meta:
         model = Exercise
         fields = ('id', 'name', 'icon', 'repeat')

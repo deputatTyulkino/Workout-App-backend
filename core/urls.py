@@ -29,4 +29,5 @@ urlpatterns = [
     ),
     path('auth/', include('apps.accounts.urls')),
     path('exercise/', include('apps.exercise.urls')),
+    path('workouts/', include('apps.workouts.urls'))
 ]

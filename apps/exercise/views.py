@@ -25,7 +25,7 @@ class CategoryAPIView(ListAPIView):
         return super().get(request, *args, **kwargs)
 
 
-class ExerciseAPIView(ModelViewSet):
+class ExerciseViewSet(ModelViewSet):
     lookup_field = 'id'
 
     def get_serializer_class(self):
@@ -68,7 +68,7 @@ class ExerciseAPIView(ModelViewSet):
         summary='Создание упражнения',
         tags=tags,
         request=CreateExerciseSerializer,
-        responses=ExerciseSerializer
+        responses=DetailExerciseSerializer
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
