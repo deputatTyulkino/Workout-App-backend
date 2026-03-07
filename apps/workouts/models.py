@@ -17,7 +17,9 @@ class Workout(models.Model):
     duration = models.IntegerField(
         default=60, verbose_name='Duration of workout (minutes)'
     )
-    exercises = models.ManyToManyField(Exercise, verbose_name='Exercises')
+    exercises = models.ManyToManyField(
+        Exercise, verbose_name='Exercises', related_name='workouts'
+    )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

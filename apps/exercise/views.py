@@ -4,8 +4,10 @@ from rest_framework.generics import ListAPIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from apps.exercise.models import Exercise, Category
+from apps.exercise.permissions import IsOwner
 from apps.exercise.serializers import (
-    ExerciseSerializer, CategorySerializer, DetailExerciseSerializer, CreateExerciseSerializer, DestroySerializer
+    ExerciseSerializer, CategorySerializer, DetailExerciseSerializer, CreateExerciseSerializer, DestroySerializer,
+    UpdateExerciseSerializer
 )
 from rest_framework import status
 
@@ -27,6 +29,7 @@ class CategoryAPIView(ListAPIView):
 
 class ExerciseViewSet(ModelViewSet):
     lookup_field = 'id'
+    permission_classes = [IsOwner]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -76,6 +79,7 @@ class ExerciseViewSet(ModelViewSet):
     @extend_schema(
         summary='Обновление данных упражнения',
         tags=tags,
+        request=UpdateExerciseSerializer,
         responses=DetailExerciseSerializer,
         parameters=[
             OpenApiParameter(

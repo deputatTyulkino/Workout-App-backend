@@ -33,5 +33,13 @@ class DetailWorkoutSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UpdateWorkoutSerializer(serializers.ModelSerializer):
+    exercises = ExerciseSerializer(many=True)
+
+    class Meta:
+        model = Workout
+        fields = ('name', 'description', 'duration', 'is_completed', 'is_public', 'exercises')
+
+
 class DestroyWorkoutSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=50)

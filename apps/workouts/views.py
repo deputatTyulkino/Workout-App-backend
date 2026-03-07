@@ -4,9 +4,10 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
 
+from apps.exercise.permissions import IsOwner
 from apps.workouts.models import Workout
 from apps.workouts.serializers import WorkoutsSerializer, CreateWorkoutSerializer, DetailWorkoutSerializer, \
-    DestroyWorkoutSerializer
+    DestroyWorkoutSerializer, UpdateWorkoutSerializer
 
 tags = ['workouts']
 
@@ -14,6 +15,7 @@ tags = ['workouts']
 # Create your views here.
 class WorkoutViewSet(ModelViewSet):
     lookup_field = 'id'
+    permission_classes = [IsOwner]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -61,6 +63,7 @@ class WorkoutViewSet(ModelViewSet):
     @extend_schema(
         summary='Обновление тренировки',
         tags=tags,
+        request=UpdateWorkoutSerializer,
         parameters=[
             OpenApiParameter(
                 name='workout_id',
