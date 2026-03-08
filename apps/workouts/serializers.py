@@ -26,7 +26,12 @@ class CreateWorkoutSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
         exercises = validated_data.pop('exercises')
         workout = Workout.objects.create(author=user, **validated_data)
-        workout.exercises.add(exercises)
+        for ex_data in exercises:
+            try:
+                exercise = Exercise.objects.get(id=ex_data.id)
+            except Exercise.DoesNotExist:
+                raise serializers.ValidationError('Not Found exercise with this ID')
+            workout.exercises.add(exercise)
         return workout
 
 
@@ -40,11 +45,9 @@ class DetailWorkoutSerializer(serializers.ModelSerializer):
 
 
 class UpdateWorkoutSerializer(serializers.ModelSerializer):
-    exercises = ExerciseSerializer(many=True)
-
     class Meta:
         model = Workout
-        fields = ('name', 'description', 'duration', 'is_completed', 'is_public', 'exercises')
+        fields = ('name', 'description', 'duration', 'is_completed', 'is_public')
 
 
 class DestroyWorkoutSerializer(serializers.Serializer):
