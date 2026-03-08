@@ -1,14 +1,14 @@
-from functools import partial
-
 from drf_spectacular.utils import extend_schema
-from rest_framework.generics import CreateAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from apps.accounts.serializers import CreateUserSerializer, LoginSerializer, ResponseAuthSerializer, ProfileSerializer
+from apps.accounts.serializers import (
+    CreateUserSerializer, LoginSerializer, ResponseAuthSerializer, ProfileSerializer
+)
 
 tags = ['auth']
 
@@ -28,7 +28,7 @@ class RegisterAPIView(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         refresh = RefreshToken.for_user(user)
-        serializer = self.get_serializer(user)
+        serializer = ProfileSerializer(user)
         return Response(
             data={
                 'user': serializer.data,
@@ -53,12 +53,19 @@ class LoginAPIView(TokenObtainPairView):
         return super().post(request, *args, **kwargs)
 
 
-class UpdateProfileAPIView(UpdateAPIView):
+class ProfileAPIView(RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
         return self.request.user
+
+    @extend_schema(
+        summary='Получение данных профиля',
+        tags=tags
+    )
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
 
     @extend_schema(
         summary='Обновление данных пользователя',

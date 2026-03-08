@@ -74,7 +74,13 @@ class ExerciseViewSet(ModelViewSet):
         responses=DetailExerciseSerializer
     )
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        exercise = serializer.save()
+        serializer = DetailExerciseSerializer(exercise)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED
+        )
 
     @extend_schema(
         summary='Обновление данных упражнения',

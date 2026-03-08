@@ -15,11 +15,6 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
-    def validate_icon_name(self, value):
-        if value not in VALID_ICON_NAME:
-            raise serializers.ValidationError('Icon name is invalid')
-        return value
-
 
 class ExerciseSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField()
@@ -40,17 +35,22 @@ class DetailExerciseSerializer(serializers.ModelSerializer):
 
 
 class CreateExerciseSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
+    category_id = serializers.UUIDField()
 
     class Meta:
         model = Exercise
-        fields = ('name', 'description', 'repeat', 'category')
+        fields = ('name', 'description', 'repeat', 'category_id')
 
     def create(self, validated_data):
         category_id = validated_data.pop('category_id')
-        category = Category.objects.get(id=category_id)
+        try:
+            exercise_category = Category.objects.get(id=category_id)
+        except Category.DoesNotExist:
+            raise serializers.ValidationError('Not Found category with this ID')
         user = self.context['request'].user
-        exercise = Exercise.objects.create(author=user, category=category, **validated_data)
+        exercise = Exercise.objects.create(
+            author=user, category=exercise_category, **validated_data
+        )
         return exercise
 
 

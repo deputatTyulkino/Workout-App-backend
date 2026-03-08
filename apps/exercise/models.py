@@ -1,11 +1,8 @@
 import uuid
 
-from django.contrib.auth import get_user_model
 from django.db import models
-
+from django.conf import settings
 from apps.exercise.managers import ExerciseManager
-
-User = get_user_model()
 
 
 # Create your models here.
@@ -21,7 +18,9 @@ class Exercise(models.Model):
     name = models.CharField(max_length=50, verbose_name='Name of exercise')
     description = models.TextField(verbose_name='Description of exercise')
     repeat = models.IntegerField(verbose_name='Count of repeat', default=0)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='exercises')
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='exercises'
+    )
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,

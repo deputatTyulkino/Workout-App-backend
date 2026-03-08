@@ -1,6 +1,8 @@
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
 
 from apps.accounts.serializers import AuthorExerciseSerializer
+from apps.exercise.models import Exercise
 from apps.exercise.serializers import ExerciseSerializer
 from apps.workouts.models import Workout
 
@@ -12,7 +14,9 @@ class WorkoutsSerializer(serializers.ModelSerializer):
 
 
 class CreateWorkoutSerializer(serializers.ModelSerializer):
-    exercises = ExerciseSerializer(many=True)
+    exercises = PrimaryKeyRelatedField(
+        many=True, queryset=Exercise.objects.all()
+    )
 
     class Meta:
         model = Workout
@@ -20,7 +24,9 @@ class CreateWorkoutSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
+        exercises = validated_data.pop('exercises')
         workout = Workout.objects.create(author=user, **validated_data)
+        workout.exercises.add(exercises)
         return workout
 
 
