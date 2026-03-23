@@ -28,6 +28,6 @@ urlpatterns = [
         name="swagger-ui",
     ),
     path('auth/', include('apps.accounts.urls')),
-    path('exercise/', include('apps.exercise.urls')),
+    path('exercises/', include('apps.exercise.urls')),
     path('workouts/', include('apps.workouts.urls'))
 ]
