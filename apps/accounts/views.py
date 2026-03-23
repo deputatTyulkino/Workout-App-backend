@@ -1,11 +1,11 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
-from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from apps.accounts.permissions import IsTokenHave
 from apps.accounts.serializers import (
     CreateUserSerializer, LoginSerializer, ResponseAuthSerializer, ProfileSerializer
 )
@@ -55,7 +55,7 @@ class LoginAPIView(TokenObtainPairView):
 
 class ProfileAPIView(RetrieveUpdateAPIView):
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsTokenHave]
 
     def get_object(self):
         return self.request.user

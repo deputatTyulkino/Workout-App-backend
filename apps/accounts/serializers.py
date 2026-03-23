@@ -37,7 +37,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ('password',)
+        exclude = ('password', 'is_staff')
 
 
 class LoginSerializer(TokenObtainPairSerializer):
