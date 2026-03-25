@@ -9,15 +9,15 @@ User = get_user_model()
 
 class CreateUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=6)
-    password_confirm = serializers.CharField(write_only=True, min_length=6)
+    passwordConfirm = serializers.CharField(write_only=True, min_length=6)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'password_confirm')
+        fields = ('email', 'password', 'passwordConfirm')
 
     def validate(self, data):
         password = data.get('password')
-        password_confirm = data.get('password_confirm')
+        password_confirm = data.get('passwordConfirm')
         if password != password_confirm:
             raise serializers.ValidationError('Password is not equal')
         return data
@@ -27,7 +27,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        validated_data.pop('password_confirm')
+        validated_data.pop('passwordConfirm')
         user = User(email=validated_data.get('email'))
         user.set_password(validated_data.get('password'))
         user.save()
