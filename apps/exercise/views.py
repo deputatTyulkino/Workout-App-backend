@@ -11,7 +11,7 @@ from apps.exercise.serializers import (
 )
 from rest_framework import status
 
-tags = ['exercise']
+tags = ['exercises']
 
 
 # Create your views here.

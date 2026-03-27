@@ -7,7 +7,7 @@ router = routers.SimpleRouter()
 router.register(r'', ExerciseViewSet, basename='/')
 
 urlpatterns = [
-    path('category/', CategoryAPIView.as_view()),
+    path('categories/', CategoryAPIView.as_view()),
 ]
 
 urlpatterns += router.urls
